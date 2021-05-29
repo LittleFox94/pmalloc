@@ -7,6 +7,7 @@ if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endif()
 
 add_library(pmalloc pmalloc.c pmalloc.h)
+target_link_libraries(pmalloc m)
 set_target_properties(pmalloc PROPERTIES PUBLIC_HEADER pmalloc.h SOVERSION 0)
 
 if(${BUILD_TESTING})
