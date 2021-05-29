@@ -57,8 +57,8 @@
 #include <dirent.h>
 #include <limits.h>
 
-const char* pmem_header_signature = "LFOSRULZ";
-const char* pmem_freed_signature  = "DISFREED";
+static const char* pmem_header_signature = "LFOSRULZ";
+static const char* pmem_freed_signature  = "DISFREED";
 
 //! This is the pmem header
 struct pmem {
