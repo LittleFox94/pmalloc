@@ -38,6 +38,16 @@ The whole thing is quite chatty on anything unexpected. There is no way to make 
 non-chatty, deal with it.
 
 
+## Tests are failing!
+
+One of the tests is allocating a 3MB chunk. On x86\_64, this needs to allocate a 1GiB
+huge page. Since those aren't allocated by default, you systems memory might be to
+fragmented to allocate one. There is a linux cmdline flag to allocate some on boot
+(again, check out linux docs on that admin-guide/mm/hugetlbpage). If only the 3MiB test
+is failing, you can consider it as `success`. I might change the test one day to only
+log that as error when the system would have had the hugepages for that.
+
+
 ## What did you need this for?
 
 Testing LF OS drivers on linux in userspace, especially one of the few drivers LF OS has
