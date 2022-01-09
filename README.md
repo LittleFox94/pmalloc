@@ -1,3 +1,6 @@
+[![.github/workflows/test-and-build.yaml](https://github.com/LittleFox94/pmalloc/actions/workflows/test-and-build.yaml/badge.svg)](https://github.com/LittleFox94/pmalloc/actions/workflows/test-and-build.yaml)
+[![codecov](https://codecov.io/gh/LittleFox94/pmalloc/branch/main/graph/badge.svg?token=TWVR9LA7Z0)](https://codecov.io/gh/LittleFox94/pmalloc)
+
 This is an allocator for physically continuous memory in linux
 userspace.
 
