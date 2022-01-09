@@ -60,8 +60,11 @@ jobs:
       run:  apt-get -qq update && apt-get install -qq -y build-essential cmake file
     - name: Build package for ${{ matrix.os.name }} ${{ matrix.os.version }}
       run: |
-          mkdir -p build && cd build                                          && \
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=on ../  && \
+          mkdir -p build && cd build                           && \
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo                 \
+                -DBUILD_SHARED_LIBS=on                            \
+                -DCPACK_DEBIAN_PACKAGE_RELEASE=+ci$GITHUB_RUN_ID  \
+                ../                                            && \
           make   package
     - name: Uploading artifacts
       uses: actions/upload-artifact@v2
