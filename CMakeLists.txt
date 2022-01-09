@@ -10,14 +10,15 @@ add_library(pmalloc pmalloc.c pmalloc.h)
 target_link_libraries(pmalloc m)
 set_target_properties(pmalloc PROPERTIES PUBLIC_HEADER pmalloc.h SOVERSION 0)
 
-if(${BUILD_TESTING})
-    include(CTest)
-    find_package(GTest)
+find_package(GTest)
 
+if(GTEST_FOUND)
     add_executable(pmalloc_test pmalloc_test.cpp)
     target_link_libraries(pmalloc_test pmalloc GTest::Main)
 
-    add_test(NAME pmalloc COMMAND pmalloc_test)
+    add_custom_target(test pmalloc_test --gtest_output=xml:junit.xml)
+else()
+    message(WARNING "Did not find gtest, cannot build tests")
 endif()
 
 set(CPACK_PACKAGE_CONTACT "Mara Sophie Grosch <littlefox@lf-net.org>")
