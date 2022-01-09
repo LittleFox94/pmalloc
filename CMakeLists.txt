@@ -17,6 +17,23 @@ if(GTEST_FOUND)
     target_link_libraries(pmalloc_test pmalloc GTest::Main)
 
     add_custom_target(test pmalloc_test --gtest_output=xml:junit.xml)
+
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        add_executable(pmalloc_coverage pmalloc_test.cpp pmalloc.c)
+        target_link_libraries(pmalloc_coverage GTest::Main gcov)
+        target_compile_options(pmalloc_coverage PRIVATE --coverage)
+        target_link_options(pmalloc_coverage PRIVATE --coverage)
+    
+        add_custom_target(coverage
+            pmalloc_coverage --gtest_output=xml:junit.xml
+            COMMAND gcovr
+                --object-directory  CMakeFiles/pmalloc_coverage.dir/pmalloc.c.gcda
+                --root              ${CMAKE_SOURCE_DIR}
+                --filter            ${CMAKE_SOURCE_DIR}/pmalloc.c
+                --html-details      coverage
+                --xml-pretty --xml  coverage.xml
+        )
+    endif()
 else()
     message(WARNING "Did not find gtest, cannot build tests")
 endif()

@@ -11,17 +11,17 @@ jobs:
         cmake-version: 3.22.x
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install gtest
+    - name: Install gtest and gcovr
       env:
         DEBIAN_FRONTEND: noninteractive
-      run:  sudo apt-get -qq update && sudo apt-get install -qq -y libgtest-dev
+      run:  sudo apt-get -qq update && sudo apt-get install -qq -y libgtest-dev gcovr
     - name: Run tests
       run: |
         cmake     -B build -DCMAKE_BUILD_TYPE=Debug .
         make      -C build pmalloc_test
         # this needs privileges for reading the physical address and modifying
         # the amount of huge pages allocated by the system
-        sudo make -C build test
+        sudo make -C build coverage
     - name: Analyze test results
       uses: dorny/test-reporter@v1
       if: success() || failure()
@@ -29,6 +29,10 @@ jobs:
         name: Test results
         path: build/junit.xml
         reporter: jest-junit
+    - name: Upload coverage report to codecov
+      uses: codecov/codecov-action@v2
+      with:
+        files: build/coverage.xml
 
   build:
     name: Build packages
