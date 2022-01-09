@@ -1,0 +1,29 @@
+on: push
+
+jobs:
+  test:
+    name:         Test library
+    runs-on:      ubuntu-latest
+    steps:
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1.11
+      with:
+        cmake-version: 3.22.x
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install gtest
+      run:  sudo apt-get update && sudo apt-get install libgtest-dev
+    - name: Run tests
+      run: |
+        cmake     -B build -DCMAKE_BUILD_TYPE=Debug .
+        make      -C build pmalloc_test
+        # this needs privileges for reading the physical address and modifying
+        # the amount of huge pages allocated by the system
+        sudo make -C build test
+    - name: Analyze test results
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Test library
+        path: build/junit.xml
+        reporter: jest-junit
