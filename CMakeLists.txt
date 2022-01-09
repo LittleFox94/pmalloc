@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.10)
 
 project(pmalloc)
 
@@ -44,17 +44,36 @@ set(CPACK_DEBIAN_DEV_PACKAGE_SUGGESTS "cmake, build-essentials")
 
 include(GNUInstallDirs)
 
-install(
-    TARGETS
-        pmalloc
-    LIBRARY
-        COMPONENT main
-        NAMELINK_COMPONENT dev
-    ARCHIVE
-        COMPONENT main
-    PUBLIC_HEADER
-        COMPONENT dev
-)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.12.0")
+    install(
+        TARGETS
+            pmalloc
+        LIBRARY
+            COMPONENT main
+            DESTINATION lib
+            NAMELINK_COMPONENT dev
+        ARCHIVE
+            COMPONENT main
+            DESTINATION lib
+        PUBLIC_HEADER
+            COMPONENT dev
+            DESTINATION include
+    )
+else()
+    install(
+        TARGETS
+            pmalloc
+        LIBRARY
+            COMPONENT main
+            DESTINATION lib
+        ARCHIVE
+            COMPONENT main
+            DESTINATION lib
+        PUBLIC_HEADER
+            COMPONENT dev
+            DESTINATION include
+    )
+endif()
 
 include(CPack)
 include(CPackComponent)
