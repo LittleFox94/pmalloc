@@ -2,8 +2,8 @@ on: push
 
 jobs:
   test:
-    name:         Test library
-    runs-on:      ubuntu-latest
+    name: Run tests
+    runs-on: ubuntu-latest
     steps:
     - name: Setup CMake
       uses: jwlawson/actions-setup-cmake@v1.11
@@ -12,7 +12,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Install gtest
-      run:  sudo apt-get update && sudo apt-get install libgtest-dev
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run:  sudo apt-get -qq update && sudo apt-get install -qq -y libgtest-dev
     - name: Run tests
       run: |
         cmake     -B build -DCMAKE_BUILD_TYPE=Debug .
@@ -24,6 +26,49 @@ jobs:
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: Test library
+        name: Test results
         path: build/junit.xml
         reporter: jest-junit
+
+  build:
+    name: Build packages
+    runs-on: ubuntu-latest
+    needs: test
+    strategy:
+      matrix:
+        os:
+        - name: ubuntu
+          version: bionic
+        - name: ubuntu
+          version: focal
+        - name: ubuntu
+          version: impish
+        - name: debian
+          version: buster
+        - name: debian
+          version: bullseye
+        - name: debian
+          version: testing
+    container:
+      image: ${{ matrix.os.name }}:${{ matrix.os.version }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install build dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run:  apt-get -qq update && apt-get install -qq -y build-essential cmake file
+    - name: Build package for ${{ matrix.os.name }} ${{ matrix.os.version }}
+      run: |
+          mkdir -p build && cd build                                          && \
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=on ../  && \
+          make   package
+    - name: Uploading artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: pmalloc-${{ matrix.os.name }}-${{ matrix.os.version }}
+        path: |
+          build/libpmalloc_*.deb
+          build/libpmalloc-dev_*.deb
+          build/libpmalloc-dbgsym*.ddeb
+
