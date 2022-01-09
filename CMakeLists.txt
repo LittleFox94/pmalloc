@@ -50,6 +50,8 @@ install(
     LIBRARY
         COMPONENT main
         NAMELINK_COMPONENT dev
+    ARCHIVE
+        COMPONENT main
     PUBLIC_HEADER
         COMPONENT dev
 )
