@@ -42,6 +42,7 @@ set(CPACK_DEBIAN_DEV_PACKAGE_GENERATE_SHLIBS ON)
 set(CPACK_DEBIAN_DEV_PACKAGE_DEPENDS "libpmalloc")
 set(CPACK_DEBIAN_DEV_PACKAGE_SUGGESTS "cmake, build-essentials")
 
+set(CMAKE_INSTALL_PREFIX /usr)
 include(GNUInstallDirs)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.12.0")
@@ -50,14 +51,14 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.12.0")
             pmalloc
         LIBRARY
             COMPONENT main
-            DESTINATION lib
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
             NAMELINK_COMPONENT dev
         ARCHIVE
             COMPONENT main
-            DESTINATION lib
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
         PUBLIC_HEADER
             COMPONENT dev
-            DESTINATION include
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 else()
     install(
@@ -65,13 +66,13 @@ else()
             pmalloc
         LIBRARY
             COMPONENT main
-            DESTINATION lib
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE
             COMPONENT main
-            DESTINATION lib
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
         PUBLIC_HEADER
             COMPONENT dev
-            DESTINATION include
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 endif()
 
