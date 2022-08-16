@@ -53,10 +53,10 @@ log that as error when the system would have had the hugepages for that.
 
 ## What did you need this for?
 
-Testing LF OS drivers on linux in userspace, especially one of the few drivers LF OS has
-in kernel space: XHCI DbC (debug class). Unbinding the device driver from the PCI node
-and then running the driver code against it, using this library for physical memory
-allocations.
+Testing [LF OS](https://github.com/LittleFox94/lf-os_amd64) drivers on linux in userspace,
+especially one of the few drivers LF OS has in kernel space: XHCI DbC (debug class).
+Unbinding the device driver from the PCI node and then running the driver code against it,
+using this library for physical memory allocations.
 
 It's very cursed, and also kinda funny - since this is one of the few drivers in LF OS
 kernel space, it makes a lot of sense to test it in linux userspace - with linux having
