@@ -46,11 +46,11 @@ jobs:
         - name: ubuntu
           version: focal
         - name: ubuntu
-          version: impish
-        - name: debian
-          version: buster
+          version: jammy
         - name: debian
           version: bullseye
+        - name: debian
+          version: bookworm
         - name: debian
           version: testing
     container:
