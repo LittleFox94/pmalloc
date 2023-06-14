@@ -152,7 +152,7 @@ static struct pmem* get_header(void* mem) {
     if(memcmp(header->signature, pmem_header_signature, sizeof(header->signature)) != 0) {
         printf(
             "get_header: header at 0x%lx did not pass the signature check.\n"
-            "It's either not a pmem structure or there is some serious memory corruption goign on\n",
+            "It's either not a pmem structure or there is some serious memory corruption going on\n",
             (uint64_t)header
         );
     }
@@ -588,7 +588,7 @@ void pfree(void* mem) {
     if(!header) {
         // XXX: we should check with mincore() again
         if(*(uint64_t*)(header - sizeof(uint64_t)) == *(uint64_t*)pmem_freed_signature) {
-            printf("pfree: tried to free allocation that already was freed: 0x%lx\n", (uint64_t)mem);
+            printf("pfree: tried to free allocation that was already freed: 0x%lx\n", (uint64_t)mem);
         }
 
         return;
