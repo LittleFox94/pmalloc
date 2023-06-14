@@ -6,11 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup CMake
-      uses: jwlawson/actions-setup-cmake@v1.11
+      uses: jwlawson/actions-setup-cmake@v1.14
       with:
         cmake-version: 3.22.x
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Install gtest and gcovr
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -30,7 +30,7 @@ jobs:
         path: build/junit.xml
         reporter: jest-junit
     - name: Upload coverage report to codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         files: build/coverage.xml
 
@@ -57,7 +57,7 @@ jobs:
       image: ${{ matrix.os.name }}:${{ matrix.os.version }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Install build dependencies
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -71,7 +71,7 @@ jobs:
                 ../                                            && \
           make   package
     - name: Uploading artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: pmalloc-${{ matrix.os.name }}-${{ matrix.os.version }}
         path: |
